@@ -1,0 +1,62 @@
+{
+  "database": "apexpay_nosql_core",
+  "collections": [
+    {
+      "collection_name": "customer_profiles",
+      "description": "Rich customer profile storing polymorphic KYC documents and biometric keys.",
+      "sharding_key": { "customer_id": "hashed" },
+      "sample_document": {
+        "customer_id": "c1f3a2b4-5678-4321-9876-abcdef012345",
+        "first_name": "Ifenna",
+        "last_name": "Okany",
+        "email": "i.okany@apexpay.io",
+        "kyc": {
+          "tier": "TIER_3_PREMIUM",
+          "documents": [
+            {
+              "type": "INTERNATIONAL_PASSPORT",
+              "number": "A10982341",
+              "expiry_date": "2031-08-20"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "collection_name": "account_ledgers",
+      "description": "Time-series bucketed transaction collection for high-speed monthly statement generation.",
+      "sharding_key": { "account_id": 1, "bucket_year_month": 1 },
+      "sample_document": {
+        "account_id": "acc-ngn-0123456789",
+        "bucket_year_month": "2026-11",
+        "total_transactions": 2,
+        "monthly_totals": {
+          "total_credits": 120000.00,
+          "total_debits": 45000.00,
+          "net_change": 75000.00
+        },
+        "transactions": [
+          {
+            "reference": "TXN-20261101-998822",
+            "entry_type": "CREDIT",
+            "amount": 120000.00,
+            "narration": "Inward Wire Transfer"
+          }
+        ]
+      }
+    },
+    {
+      "collection_name": "realtime_fraud_audit_logs",
+      "description": "Event stream collection capturing telemetry and risk scores.",
+      "sharding_key": { "event_timestamp": 1 },
+      "sample_document": {
+        "event_id": "evt-77a8-44b2-9901-fedcba987654",
+        "customer_id": "c1f3a2b4-5678-4321-9876-abcdef012345",
+        "action": "TRANSFER_ATTEMPT",
+        "risk_score": 0.12,
+        "risk_level": "LOW",
+        "device": { "ip": "197.210.65.18", "vpn_detected": false }
+      }
+    }
+  ]
+}
